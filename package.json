@@ -1,0 +1,18 @@
+{
+  "name": "kamitsubaki_city",
+  "version": "1.0.0",
+  "description": "A wiki site for kamitsubaki city.",
+  "repository": "https://github.com/qianmo2233/kamitsubaki_city",
+  "author": "qianmo",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "vitepress": "^1.6.4"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  }
+}
