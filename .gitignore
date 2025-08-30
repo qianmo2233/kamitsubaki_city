@@ -5,3 +5,6 @@ dist
 .vscode
 .vitepress/dist
 .vitepress/cache
+
+yarn-error.log
+yarn.lock
