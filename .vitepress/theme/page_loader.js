@@ -1,5 +1,6 @@
 export function initPageLoader() {
-  // 创建 loader
+  if (typeof window === 'undefined' || typeof document === 'undefined') return
+  
   const loader = document.createElement('div')
   loader.id = 'app-loader'
   loader.innerHTML = `
