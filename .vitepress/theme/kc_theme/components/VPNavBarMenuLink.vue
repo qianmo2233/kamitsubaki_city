@@ -65,6 +65,6 @@ const { page } = useData()
 }
 
 .VPNavBarMenuLink:hover {
-  color: var(--vp-c-brand-1);
+  color: black;
 }
 </style>

@@ -285,4 +285,33 @@ watchPostEffect(() => {
     background-color: var(--vp-c-gutter);
   }
 }
+
+/* 定位到导航菜单里的每个项目 */
+.menu :deep(a) {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* 白色背景伪元素 */
+.menu :deep(a)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  transform: scaleY(0); /* 初始收起 */
+  transform-origin: top;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1; /* 保证文字在上面 */
+}
+
+/* hover 展开 */
+.menu :deep(a:hover)::before {
+  transform: scaleY(1);
+}
 </style>
