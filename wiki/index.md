@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: 世界观一览
-      link: /markdown-examples
+      link: /world
     - theme: alt
       text: 观测室
       link: https://ayo.meow0.fun
