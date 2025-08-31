@@ -29,7 +29,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
         <slot name="home-hero-info-before" />
         <slot name="home-hero-info">
           <h1 class="heading">
-            <span v-if="name" v-html="name" class="name clip"></span>
+            <span v-if="name" v-html="name" class="name clip glitch-text" :data-text="name"></span>
             <span v-if="text" v-html="text" class="text"></span>
           </h1>
           <p v-if="tagline" v-html="tagline" class="tagline"></p>
