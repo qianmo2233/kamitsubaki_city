@@ -2,6 +2,7 @@
 import NotFound from '../NotFound.vue'
 import { useData } from '../composables/data'
 import { useSidebar } from '../composables/sidebar'
+import KCWorld from './KCWorld.vue'
 import VPDoc from './VPDoc.vue'
 import VPHome from './VPHome.vue'
 import VPPage from './VPPage.vue'
@@ -37,6 +38,8 @@ const { hasSidebar } = useSidebar()
       <template #home-features-before><slot name="home-features-before" /></template>
       <template #home-features-after><slot name="home-features-after" /></template>
     </VPHome>
+
+    <KCWorld v-else-if="frontmatter.layout === 'world'" />
 
     <component
       v-else-if="frontmatter.layout && frontmatter.layout !== 'doc'"

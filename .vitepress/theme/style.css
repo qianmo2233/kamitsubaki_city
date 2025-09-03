@@ -93,7 +93,6 @@ body,
   }
 }
 
-/* 隐藏动画时淡出 */
 #app-loader.fade-out {
   opacity: 0;
   pointer-events: none;
@@ -119,7 +118,6 @@ body,
   width: 100%;
 }
 
-/* 进度条容器 */
 .progress-bar-container {
   position: absolute;
   top: 0;
@@ -130,7 +128,6 @@ body,
   overflow: hidden;
 }
 
-/* 进度条 */
 .progress-bar {
   width: 0%;
   height: 100%;
@@ -138,7 +135,6 @@ body,
   transition: width 0.2s ease;
 }
 
-/* 百分比文字 */
 .progress-percent {
   position: absolute;
   top: 24px;

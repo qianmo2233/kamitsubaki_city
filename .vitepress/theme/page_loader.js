@@ -1,6 +1,6 @@
 export function initPageLoader() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return
-  
+
   const loader = document.createElement('div')
   loader.id = 'app-loader'
   loader.innerHTML = `
@@ -79,7 +79,10 @@ export function initPageLoader() {
         setTimeout(() => {
           clearInterval(textInterval)
           loader.classList.add('fade-out')
-          setTimeout(() => loader.remove(), 600)
+          setTimeout(() => {
+            loader.remove()
+            document.documentElement.classList.add("loaded")
+          }, 600)
         }, 1000)
       }
     }, 20)
