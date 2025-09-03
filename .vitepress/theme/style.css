@@ -57,6 +57,48 @@ body,
   cursor: none !important;
 }
 
+/* 可按需调整距离与时长 */
+.drop-fade-enter-active,
+.drop-fade-leave-active {
+  transition: opacity 180ms ease-in-out, transform 180ms ease-in-out;
+  will-change: opacity, transform;
+}
+
+.drop-fade-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+  /* 上方 */
+}
+
+.drop-fade-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drop-fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drop-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+  /* 向上 */
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .drop-fade-enter-active,
+  .drop-fade-leave-active {
+    transition: opacity 150ms linear;
+  }
+
+  .drop-fade-enter-from,
+  .drop-fade-leave-to {
+    transform: none;
+  }
+}
+
 /* 遮罩层容器 */
 #app-loader {
   position: fixed;

@@ -39,8 +39,10 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
         <div class="info-section">
             <h1 class="title">{{ area.title }}</h1>
             <p class="description">{{ area.desc }}</p>
+            <button class="read-more-btn">了解更多</button>
         </div>
     </div>
+
 </template>
 
 <style scoped>
@@ -101,6 +103,24 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
     color: rgba(255, 255, 255, 1);
     filter: invert(1);
     margin-right: 2rem;
+}
+
+.read-more-btn {
+    margin-top: 2rem;
+    padding: 12px 36px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    background: transparent;
+    border: 5px solid white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.read-more-btn:hover {
+    background: white;
+    color: black;
+    transform: scale(1.05);
 }
 
 .bg-overlay {

@@ -18,9 +18,9 @@
         </svg>
 
         <!-- 清除按钮 / 提示 -->
-        <transition name="fade" mode="out-in">
+        <transition name="drop-fade" mode="out-in">
             <button key="btn" v-if="selectedIndex !== -1" class="clear-btn" @click="clearSelection">
-                眺望神椿市
+                返回眺望神椿市
             </button>
             <div key="tip" v-else class="tip">
                 点击对应区域前往探索
@@ -145,27 +145,18 @@ svg {
     background: rgba(0, 0, 0, 0.15);
     color: white;
     backdrop-filter: blur(4px);
-    padding: 2px 8px;
+    padding: 2px 16px;
     border-radius: 50px;
 }
 
 /* 按钮 */
 .clear-btn {
-    width: max-content;
-    font-size: medium;
-    font-weight: 900;
-    padding: 6px 36px;
-    background: transparent;
-    color: white;
-    border: 4px solid white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: -3rem;
-}
-
-.clear-btn:hover {
-    background: #ffffff;
-    color: #000000;
+    font-size: small;
+    margin-top: -4rem;
+    background: white;
+    color: black;
+    padding: 2px 16px;
+    border-radius: 50px;
 }
 
 /* 按钮切换动画 */
