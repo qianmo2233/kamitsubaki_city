@@ -5,10 +5,8 @@ import { useData } from "vitepress"
 
 const frontmatter = useData().frontmatter
 
-// 当前区域索引（0 表示中心，1-6 表示环绕）
 const currentArea = ref(-1)
 
-// 点击事件：切换背景
 function handleAreaClick(index) {
     currentArea.value = index
 }
@@ -26,10 +24,12 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
 </script>
 
 <template>
-    <div class="world-bg" :style="{
-        backgroundImage: bgImage
-    }"></div>
+    <div class="world-bg" :style="{ backgroundImage: bgImage }"></div>
     <div class="bg-overlay"></div>
+
+    <div class="area-wartermark" :class="{ 'is-text': currentArea >= 0 }">
+        <span v-if="currentArea >= 0">AREA{{ currentArea }}</span>
+    </div>
 
     <div class="layout">
         <div class="map-wrapper">
@@ -38,9 +38,7 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
 
         <div class="info-section">
             <h1 class="title">{{ area.title }}</h1>
-            <p class="description">
-                {{ area.desc }}
-            </p>
+            <p class="description">{{ area.desc }}</p>
         </div>
     </div>
 </template>
@@ -68,6 +66,43 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
     }
 }
 
+
+.area-wartermark {
+    position: fixed;
+    right: -40px;
+    height: 90vh;
+    width: 100vw;
+    background-image: url('/kc.svg');
+    /* 默认 svg */
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: right center;
+    filter: invert(1);
+    opacity: 0.2;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.area-wartermark.is-text {
+    background-image: none;
+    right: 0;
+    opacity: 0.2;
+}
+
+.area-wartermark span {
+    writing-mode: vertical-rl;
+    white-space: nowrap;
+    letter-spacing: -5rem;
+    text-orientation: upright;
+    font-size: 12rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 1);
+    filter: invert(1);
+    margin-right: 2rem;
+}
+
 .bg-overlay {
     position: fixed;
     inset: 0;
@@ -81,7 +116,6 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
     mix-blend-mode: multiply;
 }
 
-/* 布局 */
 .layout {
     position: relative;
     z-index: 1;
@@ -92,7 +126,6 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
     padding: 2rem;
 }
 
-/* 左上角地图 */
 .map-wrapper {
     position: fixed;
     bottom: 0rem;
@@ -102,7 +135,6 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
 
 }
 
-/* 底部文本 */
 .info-section {
     position: fixed;
     bottom: 2rem;
