@@ -1,14 +1,22 @@
 <script setup>
 import { computed, ref } from "vue"
 import KCAreaMap from "./KCAreaMap.vue"
-import { useData } from "vitepress"
+import { useData, useRouter } from "vitepress"
 
 const frontmatter = useData().frontmatter
+const router = useRouter()
 
 const currentArea = ref(-1)
 
 function handleAreaClick(index) {
     currentArea.value = index
+}
+
+function readMore() {
+    const areaInfo = frontmatter.value.areas.find((i, _) => i.index === currentArea.value)
+    if (areaInfo && areaInfo.link) {
+        router.go(areaInfo.link)
+    }
 }
 
 const bgImage = computed(() => {
@@ -39,7 +47,7 @@ const area = computed(() => frontmatter.value.areas.find((i, _) => i.index === c
         <div class="info-section">
             <h1 class="title">{{ area.title }}</h1>
             <p class="description">{{ area.desc }}</p>
-            <button class="read-more-btn">了解更多</button>
+            <button class="read-more-btn" @click="readMore">了解更多</button>
         </div>
     </div>
 

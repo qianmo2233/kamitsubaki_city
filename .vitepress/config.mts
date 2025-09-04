@@ -1,6 +1,5 @@
 import { defineConfig } from 'vitepress'
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "KAMITSUBAKI.CITY",
   description: "KAMITSUBAKI CITY",
@@ -10,7 +9,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.png' }]
   ],
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    outline: 'deep',
     nav: [
       { text: 'HOME\n主页', link: '/' },
       { text: 'WORLD\n世界观', link: '/world' },
@@ -23,12 +22,34 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'KAMITSUBAKI VERSE',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: '大黑寂', link: '/city/blackout.html' },
+          { text: '复兴课', link: '/city/fukkou.html' },
+          { text: '破维魔' , link: '/city/tesseractor.html' },
+          { text: '「Q」事件', link: '/city/quiz.html' },
+          { text: '片段' , link: '/city/fragment.html' },
+          { text: '记忆之卵', link: '/city/memory.html' },
+          { text: '魔法与异能', link: '/city/magic.html' }, 
+          { text: '现象', link: '/city/phenomen.html' },
         ]
-      }
+      },
+      {
+        text: 'AREA 0 - 零番街',
+        items: [
+          { text: '市营团地', link: '/area0/danchi.html' },
+          { text: '神椿学园', link: '/area0/gakuen.html' },
+          { text: '市立阿迦奢图书馆', link: '/area0/library.html' },
+        ]
+      },
+      {
+        text: 'AREA 1 - 壹番街',
+        items: [
+          { text: "新和平町", link: '/area1/nyuheiwataun.html' },
+          { text: "3号办公区", link: '/area1/office3.html' },
+          { text: "十九里海岸", link: '/area1/shijukuri.html' },
+        ]
+      },
     ],
 
     socialLinks: [
