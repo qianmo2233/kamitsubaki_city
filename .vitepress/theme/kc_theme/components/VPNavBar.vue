@@ -206,17 +206,6 @@ watchPostEffect(() => {
   transition: background-color 0.5s;
 }
 
-@media (min-width: 960px) {
-  .VPNavBar:not(.home.top) .content-body {
-    position: relative;
-    background-color: var(--vp-nav-bg-color);
-  }
-
-  .VPNavBar:not(.has-sidebar):not(.home.top) .content-body {
-    background-color: transparent;
-  }
-}
-
 @media (max-width: 767px) {
   .content-body {
     column-gap: 0.5rem;
@@ -272,16 +261,8 @@ watchPostEffect(() => {
   transition: background-color 0.5s;
 }
 
-.VPNavBar:not(.home) .divider-line {
-  background-color: var(--vp-c-gutter);
-}
-
 @media (min-width: 960px) {
   .VPNavBar:not(.home.top) .divider-line {
-    background-color: var(--vp-c-gutter);
-  }
-
-  .VPNavBar:not(.has-sidebar):not(.home.top) .divider {
     background-color: var(--vp-c-gutter);
   }
 }
