@@ -4,11 +4,11 @@ export const SideBarNav = [
         items: [
             { text: '大黑寂', link: '/city/blackout' },
             { text: '复兴课', link: '/city/fukkou' },
-            { text: '破维魔', link: '/city/tesseractor' },
+            { text: '破维魔与异能', link: '/city/tesseractor' },
             { text: '「Q」事件', link: '/city/quiz' },
             { text: '片段', link: '/city/fragment' },
             { text: '记忆之卵', link: '/city/memory' },
-            { text: '魔法与异能', link: '/city/magic' },
+            { text: '魔女与魔法', link: '/city/magic' },
             { text: '现象', link: '/city/phenomen' },
         ]
     },
