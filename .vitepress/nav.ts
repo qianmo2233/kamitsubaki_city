@@ -2,14 +2,15 @@ export const SideBarNav = [
     {
         text: 'KAMITSUBAKI VERSE',
         items: [
-            { text: '大黑寂', link: '/city/blackout' },
-            { text: '复兴课', link: '/city/fukkou' },
-            { text: '破维魔与异能', link: '/city/tesseractor' },
-            { text: '「Q」事件', link: '/city/quiz' },
-            { text: '片段', link: '/city/fragment' },
-            { text: '记忆之卵', link: '/city/memory' },
-            { text: '魔女与魔法', link: '/city/magic' },
-            { text: '现象', link: '/city/phenomen' },
+            { text: 'Overview', link: '/world/overview' },
+            { text: '大黑寂', link: '/world/blackout' },
+            { text: '复兴课', link: '/wor/fukkou' },
+            { text: '破维魔与异能', link: '/world/tesseractor' },
+            { text: '魔女与魔法', link: '/world/magic' },
+            { text: '「Q」事件', link: '/world/quiz' },
+            { text: '片段', link: '/world/fragment' },
+            { text: '记忆之卵', link: '/world/memory' },
+            { text: '现象、轮回与历史', link: '/world/phenomenon' },
         ]
     },
     {
