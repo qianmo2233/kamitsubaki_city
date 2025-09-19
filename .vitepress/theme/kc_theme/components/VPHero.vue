@@ -46,7 +46,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
       </div>
     </div>
   </div>
-</template>
+</template> 
 
 <style scoped>
 .VPHero {

@@ -4,13 +4,13 @@ export const SideBarNav = [
         items: [
             { text: 'Overview', link: '/world/overview' },
             { text: '大黑寂', link: '/world/blackout' },
-            { text: '复兴课', link: '/wor/fukkou' },
+            { text: '复兴课', link: '/world/fukkou' },
             { text: '破维魔与异能', link: '/world/tesseractor' },
             { text: '魔女与魔法', link: '/world/magic' },
             { text: '「Q」事件', link: '/world/quiz' },
             { text: '片段', link: '/world/fragment' },
             { text: '记忆之卵', link: '/world/memory' },
-            { text: '现象、轮回与历史', link: '/world/phenomenon' },
+            { text: '现象、轮回与现实', link: '/world/phenomenon' },
         ]
     },
     {
@@ -39,4 +39,6 @@ export const HeaderNav = [
     { text: 'NOVEL\n小说', link: 'https://b23.tv/bAX80f1' },
     { text: 'GAME\n游戏', link: 'https://srd.kamitsubaki.jp/cn/game' },
     { text: 'ANIMATE\n动画', link: 'https://www.bilibili.com/bangumi/media/md26640136' },
+    { text: 'NTF\n数字藏品', link: 'https://opensea.io/collection/kamitsubaki-rg' },
+    { text: 'TCGO\n在线卡牌游戏', link: 'https://tcgo.kamitsubaki.city/' },
 ]
