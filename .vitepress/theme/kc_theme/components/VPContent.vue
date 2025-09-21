@@ -2,6 +2,7 @@
 import NotFound from '../NotFound.vue'
 import { useData } from '../composables/data'
 import { useSidebar } from '../composables/sidebar'
+import KCCharacter from './KCCharacter.vue'
 import KCWorld from './KCWorld.vue'
 import VPDoc from './VPDoc.vue'
 import VPHome from './VPHome.vue'
@@ -40,6 +41,7 @@ const { hasSidebar } = useSidebar()
     </VPHome>
 
     <KCWorld v-else-if="frontmatter.layout === 'world'" />
+    <KCCharacter v-else-if="frontmatter.layout === 'character'" />
 
     <component
       v-else-if="frontmatter.layout && frontmatter.layout !== 'doc'"
