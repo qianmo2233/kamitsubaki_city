@@ -1,8 +1,9 @@
 export const SideBarNav = [
     {
-        text: 'KAMITSUBAKI VERSE',
+        text: 'VERSE',
         items: [
             { text: 'Overview', link: '/world/overview' },
+            { text: 'Timeline', link: '/world/timeline'},
             { text: '大黑寂', link: '/world/blackout' },
             { text: '复兴课', link: '/world/fukkou' },
             { text: '破维魔与异能', link: '/world/tesseractor' },
