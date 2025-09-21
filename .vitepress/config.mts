@@ -6,6 +6,7 @@ export default defineConfig({
   description: "KAMITSUBAKI CITY",
   appearance: 'force-dark',
   cleanUrls: true,
+  ignoreDeadLinks:true,
   srcDir: 'wiki',
   head: [
     ['link', { rel: 'icon', href: '/favicon.png' }]
