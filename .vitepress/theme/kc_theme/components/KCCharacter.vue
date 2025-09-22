@@ -1,6 +1,6 @@
 <template>
     <div class="hero-page">
-        <section class="hero" ref="heroRef">
+        <section class="hero panel" ref="heroRef">
             <div class="bg-overlay"></div>
 
             <h1 class="hero-title" ref="titleRef">CHARACTER</h1>
@@ -21,7 +21,9 @@
             </div>
         </section>
 
-        <section class="character-grid">
+        <section class="character-grid panel">
+            <div class="character-overlay"></div>
+            <h2 class="character-title" ref="section2TitleRef">WITCH 魔女之子</h2>
             <div v-for="i in 5" :key="'c' + i" class="character-card">
                 <img :src="`/chara_main${i}_1.png`" :alt="`Character ${i}`" />
             </div>
@@ -36,21 +38,28 @@
 <script setup>
 import { ref, onMounted, nextTick } from "vue";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+
+gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
 
 const mainRef = ref(null);
 const titleRef = ref(null);
 const hintRef = ref(null);
+const section2TitleRef = ref(null);
 let tl = null;
 
 onMounted(async () => {
     await nextTick();
+
+    document.body.style.overflow = "hidden";
+
     const imgs = mainRef.value.querySelectorAll("img");
     const title = titleRef.value;
     const hint = hintRef.value;
 
-    const initValues = [
-        { x: 10 }, { x: -15 }, { x: -40 }, { x: -65 }
-    ];
+    const initValues = [{ x: 10 }, { x: -15 }, { x: -40 }, { x: -65 }];
     imgs.forEach((img, i) => {
         gsap.set(img, {
             xPercent: initValues[i].x,
@@ -72,7 +81,14 @@ onMounted(async () => {
 
     gsap.set(hint, { opacity: 0, y: 20 });
 
-    tl = gsap.timeline({ defaults: { ease: "circ.inOut" } });
+    tl = gsap.timeline({
+        defaults: { ease: "circ.inOut" },
+        onComplete: () => {
+            document.body.style.overflow = "auto";
+
+            enableSectionScroll();
+        }
+    });
 
     const runIfLoaded = () => {
         if (document.documentElement.classList.contains("loaded")) {
@@ -84,28 +100,106 @@ onMounted(async () => {
                     observer.disconnect();
                 }
             });
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+            observer.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ["class"]
+            });
         }
     };
 
     runIfLoaded();
+    initST();
 });
+
+
+const initST = () => {
+    const imgs = document.querySelectorAll(".character-card img");
+    const titleEl = section2TitleRef.value;
+
+    const split = new SplitText(titleEl, {
+        type: "chars",
+    });
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".character-grid",
+            start: "top 60%",
+            toggleActions: "play none none reverse",
+        },
+    });
+
+    tl.from(split.chars, {
+        opacity: 0,
+        y: 40,
+        stagger: 0.02,
+        duration: 0.3,
+        ease: "cric.inOut",
+    });
+
+    imgs.forEach((img, i) => {
+        const yOffset = 100 + i * 40;
+        tl.fromTo(
+            img,
+            { opacity: 0, y: yOffset },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "circ.out",
+            },
+            "-=0.5"
+        );
+    });
+};
 
 const runAnimations = () => {
     const imgs = mainRef.value.querySelectorAll("img");
     const title = titleRef.value;
     const hint = hintRef.value;
 
-    tl.to(title, { scale: 1, opacity: 1, duration: 0.7 })
-      .to(title, { scale: 0.7, yPercent: -1000, duration: 0.7 })
-      .to(imgs[0], { xPercent: 0, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.0")
-      .to(imgs[1], { xPercent: -25, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
-      .to(imgs[2], { xPercent: -50, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
-      .to(imgs[3], { xPercent: -75, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
-      .to(hint, { opacity: 1, y: 0, duration: 1 }, "-=0.4");
+    tl.to(title, {
+        scale: 1,
+        opacity: 1,
+        duration: 1.2,
+        scrambleText: {
+            text: "CHARACTER",
+            chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            revealDelay: 0.3,
+            speed: 0.5,
+        },
+    })
+        .to(title, { scale: 0.7, yPercent: -1000, duration: 0.7 })
+        .to(imgs[0], { xPercent: 0, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.0")
+        .to(imgs[1], { xPercent: -25, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
+        .to(imgs[2], { xPercent: -50, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
+        .to(imgs[3], { xPercent: -75, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
+        .to(hint, { opacity: 1, y: 0, duration: 1 }, "-=0.4");
 
-    gsap.to(hint, { y: 1, repeat: -1, yoyo: true, duration: 3, ease: "power1.inOut" });
-}
+    gsap.to(hint, {
+        y: 1,
+        repeat: -1,
+        yoyo: true,
+        duration: 3,
+        ease: "power1.inOut",
+    });
+};
+
+const enableSectionScroll = () => {
+    const panels = gsap.utils.toArray(".panel");
+
+    ScrollTrigger.normalizeScroll(true);
+    ScrollTrigger.refresh();
+
+    panels.forEach((panel) => {
+        ScrollTrigger.create({
+            trigger: panel,
+            start: "top top",
+            pinSpacing: false,
+            snap: 1 / (panels.length - 1),
+        });
+    });
+};
 </script>
 
 <style scoped>
@@ -123,6 +217,16 @@ section {
 
 .hero {
     overflow: hidden;
+}
+
+.character-title {
+    position: absolute;
+    top: 144px;
+    left: 64px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    z-index: 10;
 }
 
 .scroll-hint {
@@ -150,6 +254,20 @@ section {
     inset: 0;
     background: linear-gradient(to bottom,
             rgba(0, 0, 0, 1),
+            rgba(0, 0, 0, 0.2) 40%,
+            rgba(0, 0, 0, 0.2) 60%,
+            rgba(0, 0, 0, 1)),
+        radial-gradient(circle, rgba(0, 0, 0, 0.4) 1px, transparent 1px);
+    background-size: 100% 100%, 6px 6px;
+    mix-blend-mode: multiply;
+}
+
+.character-overlay {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0),
             rgba(0, 0, 0, 0.2) 40%,
             rgba(0, 0, 0, 0.2) 60%,
             rgba(0, 0, 0, 1)),
@@ -210,21 +328,19 @@ section {
 
 .character-card {
     align-self: self-end;
-    height: 100%;
+    height: 80%;
     flex: 1;
     overflow: hidden;
-    border-radius: 12px;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .character-card img {
     object-fit: cover;
-    height: 100%;
+    height: 220%;
     display: block;
-    transition: transform 0.4s ease;
+    opacity: 0;
+    transform: translateY(50px);
 }
-
-.character-card:hover img {}
 
 /* 占位 section */
 .placeholder {
