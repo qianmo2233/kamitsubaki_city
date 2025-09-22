@@ -1,6 +1,5 @@
 <template>
     <div class="hero-page">
-        <!-- Section 1 -->
         <section class="hero" ref="heroRef">
             <div class="bg-overlay"></div>
 
@@ -16,18 +15,15 @@
             </div>
 
             <div class="mv__main" ref="mainRef">
-                <div class="mv__main__1 mv__main__ph">
+                <div v-for="i in 4" :key="i" :class="`mv__main__${i} mv__main__ph`">
                     <img src="/character_bg.jpeg" alt="" />
                 </div>
-                <div class="mv__main__2 mv__main__ph">
-                    <img src="/character_bg.jpeg" alt="" />
-                </div>
-                <div class="mv__main__3 mv__main__ph">
-                    <img src="/character_bg.jpeg" alt="" />
-                </div>
-                <div class="mv__main__4 mv__main__ph">
-                    <img src="/character_bg.jpeg" alt="" />
-                </div>
+            </div>
+        </section>
+
+        <section class="character-grid">
+            <div v-for="i in 5" :key="'c' + i" class="character-card">
+                <img :src="`/chara_main${i}_1.png`" :alt="`Character ${i}`" />
             </div>
         </section>
 
@@ -38,22 +34,31 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import gsap from "gsap";
 
 const mainRef = ref(null);
 const titleRef = ref(null);
 const hintRef = ref(null);
+let tl = null;
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick();
     const imgs = mainRef.value.querySelectorAll("img");
     const title = titleRef.value;
     const hint = hintRef.value;
 
-    gsap.set(imgs[0], { xPercent: 10, scale: 1.1, opacity: 0, filter: "grayscale(1) contrast(3)" });
-    gsap.set(imgs[1], { xPercent: -15, scale: 1.1, opacity: 0, filter: "grayscale(1) contrast(3)" });
-    gsap.set(imgs[2], { xPercent: -40, scale: 1.1, opacity: 0, filter: "grayscale(1) contrast(3)" });
-    gsap.set(imgs[3], { xPercent: -65, scale: 1.1, opacity: 0, filter: "grayscale(1) contrast(3)" });
+    const initValues = [
+        { x: 10 }, { x: -15 }, { x: -40 }, { x: -65 }
+    ];
+    imgs.forEach((img, i) => {
+        gsap.set(img, {
+            xPercent: initValues[i].x,
+            scale: 1.1,
+            opacity: 0,
+            filter: "grayscale(1) contrast(3)"
+        });
+    });
 
     gsap.set(title, {
         scale: 3,
@@ -67,35 +72,40 @@ onMounted(() => {
 
     gsap.set(hint, { opacity: 0, y: 20 });
 
-    const tl = gsap.timeline({ defaults: { ease: "circ.inOut" } });
+    tl = gsap.timeline({ defaults: { ease: "circ.inOut" } });
 
-    tl.to(title, {
-        scale: 1,
-        opacity: 1,
-        duration: 0.7,
-    });
+    const runIfLoaded = () => {
+        if (document.documentElement.classList.contains("loaded")) {
+            runAnimations();
+        } else {
+            const observer = new MutationObserver(() => {
+                if (document.documentElement.classList.contains("loaded")) {
+                    runAnimations();
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+        }
+    };
 
-    tl.to(title, {
-        yPercent: -1000,
-        duration: 0.7,
-    });
-
-    tl.to(imgs[0], { xPercent: 0, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.0")
-        .to(imgs[1], { xPercent: -25, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
-        .to(imgs[2], { xPercent: -50, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
-        .to(imgs[3], { xPercent: -75, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4");
-
-
-    tl.to(hint, { opacity: 1, y: 0, duration: 1 }, "-=0.4");
-
-    gsap.to(hint, {
-        y: 1,
-        repeat: -1,
-        yoyo: true,
-        duration: 3,
-        ease: "power1.inOut",
-    });
+    runIfLoaded();
 });
+
+const runAnimations = () => {
+    const imgs = mainRef.value.querySelectorAll("img");
+    const title = titleRef.value;
+    const hint = hintRef.value;
+
+    tl.to(title, { scale: 1, opacity: 1, duration: 0.7 })
+      .to(title, { scale: 0.7, yPercent: -1000, duration: 0.7 })
+      .to(imgs[0], { xPercent: 0, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.0")
+      .to(imgs[1], { xPercent: -25, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
+      .to(imgs[2], { xPercent: -50, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
+      .to(imgs[3], { xPercent: -75, scale: 1, opacity: 1, filter: "grayscale(0) contrast(1)", duration: 1.5 }, "-=1.4")
+      .to(hint, { opacity: 1, y: 0, duration: 1 }, "-=0.4");
+
+    gsap.to(hint, { y: 1, repeat: -1, yoyo: true, duration: 3, ease: "power1.inOut" });
+}
 </script>
 
 <style scoped>
@@ -188,6 +198,33 @@ section {
 .mv__main__4 {
     left: 75%;
 }
+
+/* 新增 Section: 五等分图片 */
+.character-grid {
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: black;
+}
+
+.character-card {
+    align-self: self-end;
+    height: 100%;
+    flex: 1;
+    overflow: hidden;
+    border-radius: 12px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.character-card img {
+    object-fit: cover;
+    height: 100%;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.character-card:hover img {}
 
 /* 占位 section */
 .placeholder {
