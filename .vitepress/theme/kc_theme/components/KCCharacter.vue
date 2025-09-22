@@ -23,9 +23,10 @@
 
         <section class="character-grid panel">
             <div class="character-overlay"></div>
-            <h2 class="character-title" ref="section2TitleRef">WITCH 魔女之子</h2>
-            <div v-for="i in 5" :key="'c' + i" class="character-card">
-                <img :src="`/chara_main${i}_1.png`" :alt="`Character ${i}`" />
+            <h2 class="character-title" ref="section2TitleRef">WITCHLING 魔女之子</h2>
+            <div v-for="i in 5" :key="'cw' + i" class="character-card">
+                <p class="character-name">{{ characters_witchling[i - 1].name }}</p>
+                <img :src="characters_witchling[i - 1].img" :alt="`CW ${i}`" />
             </div>
         </section>
 
@@ -43,6 +44,29 @@ import { SplitText } from "gsap/SplitText";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
+
+const characters_witchling = ref([
+    {
+        img: "/chara_main1_1.png",
+        name: "森先 化步",
+    },
+    {
+        img: "/chara_main2_1.png",
+        name: "谷置 狸眼",
+    },
+    {
+        img: "/chara_main3_1.png",
+        name: "潮主 派流",
+    },
+    {
+        img: "/chara_main4_1.png",
+        name: "夜河 世界",
+    },
+    {
+        img: "/chara_main5_1.png",
+        name: "轮回 此处",
+    },
+])
 
 const mainRef = ref(null);
 const titleRef = ref(null);
@@ -86,7 +110,7 @@ onMounted(async () => {
         onComplete: () => {
             document.body.style.overflow = "auto";
 
-            enableSectionScroll();
+            //enableSectionScroll();
         }
     });
 
@@ -114,28 +138,47 @@ onMounted(async () => {
 
 const initST = () => {
     const imgs = document.querySelectorAll(".character-card img");
+    const names = document.querySelectorAll(".character-name");
     const titleEl = section2TitleRef.value;
 
     const split = new SplitText(titleEl, {
         type: "chars",
     });
 
+    gsap.fromTo(
+        names,
+        { x: 200 }, // 初始：在右边不可见
+        {
+            x: 0,
+            stagger: 0.1,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".character-grid",
+                start: "top 100%",
+                end: "top 20%",
+                scrub: true,
+            },
+        }
+    );
+
     const tl = gsap.timeline({
         scrollTrigger: {
             trigger: ".character-grid",
-            start: "top 60%",
+            start: "top 20%",
             toggleActions: "play none none reverse",
         },
     });
 
+    // 文字入场
     tl.from(split.chars, {
         opacity: 0,
         y: 40,
         stagger: 0.02,
-        duration: 0.3,
-        ease: "cric.inOut",
+        duration: 0.4,
+        ease: "expo.out",
     });
 
+    // 图片入场
     imgs.forEach((img, i) => {
         const yOffset = 100 + i * 40;
         tl.fromTo(
@@ -151,6 +194,31 @@ const initST = () => {
             "-=0.5"
         );
     });
+
+    // 在时间线结束后再启用 hover 动画
+    tl.add(() => {
+        imgs.forEach((img) => {
+            img.addEventListener("mouseenter", () => {
+                gsap.to(img, {
+                    scale: 1.1,
+                    y: 30,
+                    duration: 0.4,
+                    ease: "power2.out",
+                    background: "linear-gradient(to top, rgba(255,255,255,1), rgba(0,0,0,0))"
+                });
+            });
+
+            img.addEventListener("mouseleave", () => {
+                gsap.to(img, {
+                    scale: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out",
+                    background: 'linear-gradient(to top, rgba(255,255,255,0.6), rgba(0,0,0,0))'
+                });
+            });
+        });
+    });
 };
 
 const runAnimations = () => {
@@ -165,8 +233,8 @@ const runAnimations = () => {
         scrambleText: {
             text: "CHARACTER",
             chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            revealDelay: 0.3,
-            speed: 0.5,
+            revealDelay: 0.4,
+            speed: 2,
         },
     })
         .to(title, { scale: 0.7, yPercent: -1000, duration: 0.7 })
@@ -221,12 +289,22 @@ section {
 
 .character-title {
     position: absolute;
-    top: 144px;
+    top: 128px;
     left: 64px;
     font-size: 2rem;
     font-weight: bold;
     color: white;
     z-index: 10;
+}
+
+.character-name {
+    position: absolute;
+    right: 20px;
+    top: 64px;
+    font-size: 6rem;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    font-family: "SimSun", "NSimSun", "Songti SC", "宋体", serif;
 }
 
 .scroll-hint {
@@ -263,6 +341,7 @@ section {
 }
 
 .character-overlay {
+    pointer-events: none;
     position: absolute;
     z-index: 10;
     inset: 0;
@@ -327,15 +406,16 @@ section {
 }
 
 .character-card {
+    position: relative;
     align-self: self-end;
     height: 80%;
     flex: 1;
     overflow: hidden;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 .character-card img {
     object-fit: cover;
+    -webkit-user-drag: none;
     height: 220%;
     display: block;
     opacity: 0;
