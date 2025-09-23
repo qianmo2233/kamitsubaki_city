@@ -1,5 +1,5 @@
 <template>
-    <div class="hero-page">
+    <div class="hero-page" id="smooth-content">
         <section class="hero panel" ref="heroRef">
             <div class="bg-overlay"></div>
 
@@ -21,29 +21,41 @@
             </div>
         </section>
 
-        <section class="character-grid panel">
-            <div class="character-overlay"></div>
-            <h2 class="character-title" ref="section2TitleRef">WITCHLING 魔女之子</h2>
-            <div v-for="i in 5" :key="'cw' + i" class="character-card">
-                <p class="character-name">{{ characters_witchling[i - 1].name }}</p>
-                <img :src="characters_witchling[i - 1].img" :alt="`CW ${i}`" />
-            </div>
-        </section>
+        <div class="horizontal-wrapper">
+            <section class="character-grid h-section">
+                <div class="character-overlay"></div>
+                <h2 class="character-title" ref="section2TitleRef">WITCHLING 魔女之子</h2>
+                <div v-for="i in 5" :key="'cw' + i" class="character-card">
+                    <p class="character-name">{{ characters_witchling[i - 1].name }}</p>
+                    <img :src="characters_witchling[i - 1].img" :alt="`CW ${i}`" />
+                </div>
+            </section>
 
-        <section class="placeholder" v-for="i in 3" :key="'p' + i">
-            <h1>character page under construction</h1>
-        </section>
+            <section class="character-grid h-section">
+                <div class="character-overlay"></div>
+                <h2 class="character-title">FAMILIER 眷魔</h2>
+                <div v-for="i in 5" :key="'cf' + i" class="character-card">
+                    <p class="character-name">{{ characters_familier[i - 1].name }}</p>
+                    <img :src="characters_familier[i - 1].img" :alt="`CF ${i}`" />
+                </div>
+            </section>
+        </div>
+
+        <div class="placeholder">
+            <button class="read-more-btn" @click="window.location.href = '/character/kafu'">更多角色</button>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, onBeforeUnmount } from "vue";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 
-gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin);
+gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, ScrollSmoother);
 
 const characters_witchling = ref([
     {
@@ -68,11 +80,35 @@ const characters_witchling = ref([
     },
 ])
 
+const characters_familier = ref([
+    {
+        img: "/chara_main6_1.png",
+        name: "拉普拉斯",
+    },
+    {
+        img: "/chara_main7_1.png",
+        name: "哈斯塔",
+    },
+    {
+        img: "/chara_main8_1.png",
+        name: "阿耆尼",
+    },
+    {
+        img: "/chara_main9_1.png",
+        name: "阿涅摩斯",
+    },
+    {
+        img: "/chara_main10_1.png",
+        name: "库格尔",
+    },
+])
+
 const mainRef = ref(null);
 const titleRef = ref(null);
 const hintRef = ref(null);
 const section2TitleRef = ref(null);
 let tl = null;
+let smoother = null;
 
 onMounted(async () => {
     await nextTick();
@@ -133,6 +169,43 @@ onMounted(async () => {
 
     runIfLoaded();
     initST();
+
+    nextTick(() => {
+        const sections = gsap.utils.toArray(".horizontal-wrapper .character-grid");
+        const totalScroll = (sections.length - 1) * window.innerWidth;
+
+        gsap.to(sections, {
+            xPercent: -100 * (sections.length - 1),
+            ease: "none",
+            scrollTrigger: {
+                pin: true,
+                scrub: 1,
+                start: "top top",
+                trigger: ".horizontal-wrapper",
+                end: () => "+=" + totalScroll,
+            }
+        });
+
+        const grids = gsap.utils.toArray(".character-grid");
+        grids.forEach((grid, i) => {
+            const title = grid.querySelector(".character-title");
+            if (!title) return;
+
+            ScrollTrigger.create({
+                trigger: ".horizontal-wrapper",
+                start: () => "top top",
+                end: () => "top top+=" + (i * window.innerWidth),
+                pin: title,
+                pinSpacing: false,
+                scrub: false,
+            });
+        });
+
+        smoother = ScrollSmoother.create({
+            smooth: 1,
+            effects: true
+        })
+    });
 });
 
 
@@ -195,7 +268,6 @@ const initST = () => {
         );
     });
 
-    // 在时间线结束后再启用 hover 动画
     tl.add(() => {
         imgs.forEach((img) => {
             img.addEventListener("mouseenter", () => {
@@ -253,21 +325,20 @@ const runAnimations = () => {
     });
 };
 
-const enableSectionScroll = () => {
-    const panels = gsap.utils.toArray(".panel");
+onBeforeUnmount(() => {
+    if (tl) {
+        tl.kill();
+        tl = null;
+    }
 
-    ScrollTrigger.normalizeScroll(true);
-    ScrollTrigger.refresh();
 
-    panels.forEach((panel) => {
-        ScrollTrigger.create({
-            trigger: panel,
-            start: "top top",
-            pinSpacing: false,
-            snap: 1 / (panels.length - 1),
-        });
-    });
-};
+    if (smoother) {
+        smoother.kill();
+        smoother = null;
+    }
+
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+});
 </script>
 
 <style scoped>
@@ -279,12 +350,36 @@ const enableSectionScroll = () => {
 
 section {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh + 64px);
     position: relative;
+}
+
+.read-more-btn {
+    margin-top: 2rem;
+    padding: 12px 36px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    background: transparent;
+    border: 5px solid white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.read-more-btn:hover {
+    background: white;
+    color: black;
+    transform: scale(1.05);
 }
 
 .hero {
     overflow: hidden;
+}
+
+.horizontal-wrapper {
+    display: flex;
+    height: 100vh;
+    width: max-content;
 }
 
 .character-title {
@@ -400,6 +495,7 @@ section {
 .character-grid {
     height: 100vh;
     display: flex;
+    flex: 0 0 100vw;
     justify-content: space-between;
     align-items: center;
     background: black;
@@ -422,10 +518,11 @@ section {
     transform: translateY(50px);
 }
 
-/* 占位 section */
 .placeholder {
+    height: 30vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: black;
 }
 </style>
