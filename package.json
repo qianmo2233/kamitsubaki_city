@@ -17,8 +17,6 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
-    "gasp": "^0.0.2",
-    "gsap": "^3.13.0",
-    "parallax-js": "^3.1.0"
+    "gsap": "^3.13.0"
   }
 }
