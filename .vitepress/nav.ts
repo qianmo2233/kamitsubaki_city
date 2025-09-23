@@ -12,6 +12,7 @@ export const SideBarNav = [
             { text: '片段', link: '/world/fragment' },
             { text: '记忆之卵', link: '/world/memory' },
             { text: '现象、轮回与现实', link: '/world/phenomenon' },
+            { text: '神椿市协奏中。', link: '/world/ensemble' }
         ]
     },
     {
