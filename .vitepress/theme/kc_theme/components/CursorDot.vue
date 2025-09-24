@@ -11,42 +11,54 @@ const isPressed = ref(false);
 const isHover = ref(false);
 const isVisible = ref(false);
 
+let rafId: number | null = null;
+
 function move(e: MouseEvent) {
-    x.value = e.clientX;
-    y.value = e.clientY;
-    isVisible.value = true;
+  x.value = e.clientX;
+  y.value = e.clientY;
+  if (!isVisible.value) isVisible.value = true;
 }
 
 function animate() {
-    ringX.value += (x.value - ringX.value) * 0.15;
-    ringY.value += (y.value - ringY.value) * 0.15;
-    requestAnimationFrame(animate);
+  ringX.value += (x.value - ringX.value) * 0.15;
+  ringY.value += (y.value - ringY.value) * 0.15;
+  rafId = requestAnimationFrame(animate);
 }
 
 onMounted(() => {
-    window.addEventListener("mousemove", move);
-    window.addEventListener("mousedown", () => (isPressed.value = true));
-    window.addEventListener("mouseup", () => (isPressed.value = false));
-    window.addEventListener("mouseleave", () => (isVisible.value = false)); // 移出页面隐藏
-    window.addEventListener("mouseenter", () => (isVisible.value = true)); // 再次进入显示
+  window.addEventListener("mousemove", move, { passive: true });
+  window.addEventListener("mousedown", () => (isPressed.value = true));
+  window.addEventListener("mouseup", () => (isPressed.value = false));
 
-    // 检测鼠标是否悬停在可点击元素上
-    document.body.addEventListener("mouseover", e => {
-        if ((e.target as HTMLElement).closest("a, button, [role='button'], input, textarea")) {
-            isHover.value = true;
-        }
-    });
-    document.body.addEventListener("mouseout", e => {
-        if ((e.target as HTMLElement).closest("a, button, [role='button'], input, textarea")) {
-            isHover.value = false;
-        }
-    });
+  document.addEventListener("mouseout", (e) => {
+    if (!e.relatedTarget) {
+      isVisible.value = false;
+    }
+  });
+  document.addEventListener("mouseover", () => {
+    isVisible.value = true;
+  });
 
-    animate();
+  document.body.addEventListener("mouseover", (e) => {
+    const target = (e.target as HTMLElement).closest(
+      "a, button, [role='button'], input, textarea"
+    );
+    isHover.value = !!target;
+  });
+
+  animate();
 });
 
 onBeforeUnmount(() => {
-    window.removeEventListener("mousemove", move);
+  window.removeEventListener("mousemove", move);
+  window.removeEventListener("mousedown", () => (isPressed.value = true));
+  window.removeEventListener("mouseup", () => (isPressed.value = false));
+
+  document.removeEventListener("mouseout", () => {});
+  document.removeEventListener("mouseover", () => {});
+  document.body.removeEventListener("mouseover", () => {});
+
+  if (rafId) cancelAnimationFrame(rafId);
 });
 </script>
 
