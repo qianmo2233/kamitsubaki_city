@@ -46,7 +46,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
       </div>
     </div>
   </div>
-</template> 
+</template>
 
 <style scoped>
 .VPHero {
@@ -86,7 +86,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
   position: absolute;
   bottom: 4rem;
   left: 4rem;
-  max-width: 40%; 
+  max-width: 100%;
   z-index: 10;
   order: 2;
   flex-grow: 1;
@@ -106,7 +106,6 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 @media (min-width: 960px) {
   .main {
     order: 1;
-    width: calc((100% / 3) * 2);
   }
 
   .VPHero.has-image .main {
@@ -122,7 +121,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 .name,
 .text {
   width: fit-content;
-  max-width: 392px;
+  max-width: 9999px;
   letter-spacing: -0.4px;
   line-height: 40px;
   font-size: 32px;
@@ -150,7 +149,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 
   .name,
   .text {
-    max-width: 576px;
+    max-width: 9999px;
     line-height: 56px;
     font-size: 48px;
   }
@@ -172,7 +171,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 
 .tagline {
   padding-top: 8px;
-  max-width: 392px;
+  max-width: 9999px;
   line-height: 28px;
   font-size: 18px;
   font-weight: 500;
@@ -187,7 +186,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 @media (min-width: 640px) {
   .tagline {
     padding-top: 12px;
-    max-width: 576px;
+    max-width: 9999px;
     line-height: 32px;
     font-size: 20px;
   }

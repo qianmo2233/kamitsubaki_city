@@ -1,0 +1,6 @@
+---
+{
+    layout: "character",
+    sidebar: false,
+}
+---
