@@ -50,7 +50,7 @@ const heroImageSlotExists = inject('hero-image-slot-exists') as Ref<boolean>
 
 <style scoped>
 .VPHero {
-  height: 100vh;
+  height: calc(100vh - var(--vp-layout-top-height));
   margin-top: calc(var(--vp-nav-height) * -1);
   padding: var(--vp-nav-height) 24px 0;
   display: flex;

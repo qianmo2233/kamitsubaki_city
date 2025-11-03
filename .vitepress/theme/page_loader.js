@@ -26,7 +26,10 @@ export function initPageLoader() {
     '与破维魔战斗...',
     '正在窥探未来',
     '改写命运中',
-    '魔女之子集结中...'
+    '魔女之子集结中...',
+    '建立盟约中...',
+    '神椿市建设中。',
+    '神椿市协奏中。'
   ]
   const textContainer = loader.querySelector('.loader-text')
   let currentText = 0
